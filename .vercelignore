@@ -1,0 +1,9 @@
+# Local dev server only - if Vercel sees it, it runs the site as a Node
+# function (which can't stream the 78MB model) instead of static files.
+server.js
+
+# Unused leftovers / notes, no need to publish
+generate-frames-manifest.js
+frames-manifest.json
+camera_animation.json
+PROJECT_STATUS.md
