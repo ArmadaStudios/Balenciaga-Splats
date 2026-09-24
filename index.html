@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+  <title>Scrollytelling</title>
+
+
+  <style>
+
+    /* ============================================================
+       Base
+       ============================================================ */
+
+    html,
+    body {
+
+      margin: 0;
+
+      min-height: 100%;
+
+      background: #000;
+
+      overflow-x: hidden;
+
+      /*
+        The camera position is a direct function of scroll position
+        (see main.js) - no JS-side smoothing/catch-up. This just smooths
+        the scroll position itself (bounded to wherever you actually
+        scrolled, never adds distance on its own).
+      */
+
+      scroll-behavior: smooth;
+
+      /* Hide the scrollbar (Firefox / IE-Edge legacy) - scrolling still works. */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+
+    /* Hide the scrollbar (Chrome / Safari / other WebKit/Blink browsers) */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+
+    /* ============================================================
+       Canvas
+       ============================================================ */
+
+    #canvas-container {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 0;
+
+      width: 100vw;
+      height: 100vh;
+    }
+
+
+    canvas {
+
+      display: block;
+
+      width: 100%;
+      height: 100%;
+    }
+
+
+    /* ============================================================
+       Scroll spacer
+       ============================================================ */
+
+    #scroll-spacer {
+
+      position: relative;
+
+      z-index: 1;
+
+      /*
+        Height is automatically set by JavaScript.
+      */
+    }
+
+
+    /* ============================================================
+       Loading screen
+       ============================================================ */
+
+    #loading {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 2;
+    }
+
+
+    /* Two panels covering the left/right halves of the screen. On
+       finish, they slide apart like doors opening to reveal the canvas. */
+    .door {
+
+      position: fixed;
+
+      top: 0;
+
+      width: 50%;
+
+      height: 100%;
+
+      background: #000;
+
+      z-index: 2;
+
+      transition:
+        transform 1.1s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+
+    #door-left {
+      left: 0;
+    }
+
+
+    #door-right {
+      right: 0;
+    }
+
+
+    #loading.open #door-left {
+      transform: translateX(-100%);
+    }
+
+
+    #loading.open #door-right {
+      transform: translateX(100%);
+    }
+
+
+    #loading-content {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 3;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 20px;
+
+      color: #fff;
+
+      font:
+        14px
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      letter-spacing: 0.08em;
+
+      transition:
+        opacity 0.5s ease;
+    }
+
+
+    #loading-logo {
+
+      width: 180px;
+
+      /* logo file is black wordmark on white; invert to show white on
+         the black loading background */
+      filter: invert(1);
+    }
+
+
+    #loading .bar {
+
+      width: 240px;
+
+      height: 3px;
+
+      background: #333;
+    }
+
+
+    #loading .fill {
+
+      height: 100%;
+
+      width: 0%;
+
+      background: #fff;
+
+      transition:
+        width 0.15s linear;
+    }
+
+
+    #loading.open #loading-content {
+
+      opacity: 0;
+
+      pointer-events: none;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- ============================================================
+       Fixed canvas
+       ============================================================ -->
+
+  <div id="canvas-container">
+
+    <canvas id="canvas"></canvas>
+
+  </div>
+
+
+  <!-- ============================================================
+       Loading screen
+       ============================================================ -->
+
+  <div id="loading">
+
+    <div id="door-left" class="door"></div>
+    <div id="door-right" class="door"></div>
+
+    <div id="loading-content">
+
+      <img
+        id="loading-logo"
+        src="./Balenciaga-logo.png"
+        alt="Balenciaga"
+      />
+
+      <div id="loading-text">
+        0%
+      </div>
+
+      <div class="bar">
+
+        <div
+          class="fill"
+          id="loading-fill"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       Scroll area
+       ============================================================ -->
+
+  <div id="scroll-spacer"></div>
+
+
+  <!-- ============================================================
+       Three.js / Spark (gaussian splat renderer)
+       ============================================================ -->
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+      "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.2.0/spark.module.js"
+    }
+  }
+  </script>
+
+
+  <!-- ============================================================
+       JavaScript
+       ============================================================ -->
+
+  <script
+    type="module"
+    src="./main.js"
+  ></script>
+
+
+</body>
+
+</html>
