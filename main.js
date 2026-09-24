@@ -244,6 +244,7 @@ const captions = [...document.querySelectorAll(".caption")].map((el) => {
     span.setAttribute("aria-hidden", "true");
     text.appendChild(span);
   });
+  el.classList.add("ready");
 
   return {
     el,

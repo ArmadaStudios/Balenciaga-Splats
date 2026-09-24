@@ -257,6 +257,10 @@
 
       --p: 0;
 
+      /* Hidden until main.js has split the letters and taken over (.ready),
+         so a slow or stale-cached script never leaves the raw text showing. */
+      visibility: hidden;
+
       position: absolute;
 
       top: 0;
@@ -276,6 +280,11 @@
 
 
     /* --shift nudges each caption outward from the centre of its half. */
+    .caption.ready {
+      visibility: visible;
+    }
+
+
     .caption.left {
       left: 0;
       --tilt: 1;
